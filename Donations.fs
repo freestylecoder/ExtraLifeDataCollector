@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open System.Text
 open ExtraLife.Settings
 open FSharp.Data
 
@@ -55,9 +56,28 @@ let rec outputParticipantDonationData (index:int) (participantDonationsData:Part
         outputParticipantDonationData ( index + 1 )  tail
 
 let refreshParticipantDonationData () =
-    ParticipantDonations.Load( ParticipantDonationsUrl )
-    |> Array.toList
+    let data = ParticipantDonations.Load( ParticipantDonationsUrl )
+    
+    Array.toList data
     |> outputParticipantDonationData 0
 
+    let e = Math.Min( 5, data.Length )
+    let sb = new StringBuilder()
+
+    sb.AppendFormat( "Last {0} Donations ---", e  ) |> ignore
+
+    for index in [0..(e-1)] do
+        match data.[index].DonorName with
+        | None -> sb.Append( " An anonymous donor" )
+        | Some(d) -> sb.AppendFormat( " {0}", d )
+        |> ignore
+
+        match data.[index].DonationAmount with
+        | None -> sb.Append( " made a donation ---" )
+        | Some(a) -> sb.AppendFormat( " donated {0:C2} ---", a )
+        |> ignore
+
+    let outputDir = sprintf "%s%s" Settings.OutputDir "/Data/ParticipantDonations/"
+    File.WriteAllText( ( sprintf "%s%s.txt" outputDir "LastDonors" ), ( sb.ToString() ) )
     ()
 

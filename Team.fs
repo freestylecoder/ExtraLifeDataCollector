@@ -14,8 +14,8 @@ type Team = JsonProvider<"""
     "createdOn":"2000-01-01T00:00:00-0000",
     "avatarImageURL":"//sample.url",
     "teamID":54321,
-    "name":"Sample Team"}
-""", RootName="Team">
+    "name":"Sample Team"
+}""", RootName="Team">
 
 let refreshTeamData () =
     let outputDir = sprintf "%s%s" Settings.OutputDir "/Data/Team/"
@@ -27,5 +27,7 @@ let refreshTeamData () =
     File.WriteAllText( ( sprintf "%s%s" outputDir "TeamId.txt" ), teamData.TeamId.ToString() )
     File.WriteAllText( ( sprintf "%s%s" outputDir "CreatedOn.txt" ), teamData.CreatedOn.ToLocalTime().ToString() )
     File.WriteAllText( ( sprintf "%s%s" outputDir "AvatarImageUrl.txt" ), teamData.AvatarImageUrl.ToString() )
+
+    File.WriteAllText( ( sprintf "%sProgress.txt" outputDir ), ( sprintf "%s / %s" ( teamData.TotalRaisedAmount.ToString( "C2" ) ) ( teamData.FundraisingGoal.ToString( "C2" ) ) ) )
 
     ()

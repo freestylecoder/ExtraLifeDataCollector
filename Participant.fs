@@ -32,4 +32,6 @@ let refreshParticipantData () =
     File.WriteAllText( ( sprintf "%sTeamId.txt" outputDir ), data.TeamId.ToString() )
     File.WriteAllText( ( sprintf "%sIsTeamCaptain.txt" outputDir ), data.IsTeamCaptain.ToString() )
 
+    File.WriteAllText( ( sprintf "%sProgress.txt" outputDir ), ( sprintf "%s / %s" ( data.TotalRaisedAmount.ToString( "C2" ) ) ( data.FundraisingGoal.ToString( "C2" ) ) ) )
+
     ()
